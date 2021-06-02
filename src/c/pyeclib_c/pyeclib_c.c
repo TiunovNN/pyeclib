@@ -706,13 +706,14 @@ pyeclib_c_reconstruct(PyObject *self, PyObject *args)
     Py_ssize_t len = 0;
     PyBytes_AsStringAndSize(tmp_data, &(c_fragments[i]), &len);
   }
-  
+  Py_BEGIN_ALLOW_THREADS
   ret = liberasurecode_reconstruct_fragment(pyeclib_handle->ec_desc, 
                                             c_fragments, 
                                             num_fragments, 
                                             fragment_len, 
                                             destination_idx, 
-                                            c_reconstructed); 
+                                            c_reconstructed);
+  Py_END_ALLOW_THREADS
   if (ret < 0) {
     pyeclib_c_seterr(ret, "pyeclib_c_reconstruct");
     reconstructed = NULL;
